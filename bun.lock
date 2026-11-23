@@ -5,6 +5,7 @@
     "": {
       "name": "personal-store",
       "dependencies": {
+        "@elysia/cors": "2.0.0-rc.1",
         "@mastra/core": "^1.85.0",
         "@payloadcms/db-postgres": "4.0.0-beta.10",
         "@payloadcms/graphql": "4.0.0-beta.10",
@@ -153,6 +154,8 @@
     "@dnd-kit/utilities": ["@dnd-kit/utilities@3.2.2", "", { "dependencies": { "tslib": "^2.0.0" }, "peerDependencies": { "react": ">=16.8.0" } }, "sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg=="],
 
     "@drizzle-team/brocli": ["@drizzle-team/brocli@0.10.2", "", {}, "sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w=="],
+
+    "@elysia/cors": ["@elysia/cors@2.0.0-rc.1", "", { "peerDependencies": { "elysia": ">= 2.0.0-rc.0" } }, "sha512-VCYPE0lcmsbqTJW2n5TVepDMvZbi8onsUU9d3iEm4Am56aAazobUtiSlZYCkHuQHvckRZEhQ6FepsvtA1DM4FQ=="],
 
     "@emnapi/core": ["@emnapi/core@2.0.0-beta.2", "", { "dependencies": { "@emnapi/wasi-threads": "2.2.0", "tslib": "^2.4.0" } }, "sha512-MzCVoWtcg4Pm2B3je5mMvYMvj3MmBKw+fU7vbsJc9/iT8ip6/eYIHo/Dsm/mr+wsHB6SEyJDuxB09Yy6r/8+4A=="],
 

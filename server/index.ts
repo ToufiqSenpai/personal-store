@@ -11,6 +11,7 @@ import { statSync } from 'node:fs'
 import { join, resolve, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
+import { cors } from '@elysia/cors'
 import { Elysia } from 'elysia'
 
 import { mastra } from '../src/mastra/index.ts'
@@ -79,7 +80,22 @@ function serve(request: Request, path: string): Response | Promise<Response> {
   return fetchHandler(request)
 }
 
+// Studio runs on a different port, so browser preflight requests need CORS.
+const isLocalOrigin = (request: Request): boolean => {
+  const origin = request.headers.get('origin')
+  return origin !== null && /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+}
+
 const app = new Elysia()
+  .use(
+    cors({
+      origin: isLocalOrigin,
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: true,
+      preflight: true,
+    }),
+  )
   .all('/', { parse: 'none' }, ({ request, path }) => serve(request, path))
   .all('/*', { parse: 'none' }, ({ request, path }) => serve(request, path))
 

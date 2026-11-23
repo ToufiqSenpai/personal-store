@@ -20,6 +20,7 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
+    "@elysia/cors": "2.0.0-rc.1",
     "@mastra/core": "^1.85.0",
     "@payloadcms/db-postgres": "4.0.0-beta.10",
     "@payloadcms/graphql": "4.0.0-beta.10",
