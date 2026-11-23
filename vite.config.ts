@@ -13,7 +13,12 @@ export default defineConfig(
     ({ pluginOptions }) => ({
       plugins: [
         rsc(pluginOptions.rsc),
-        tanstackStart(pluginOptions.tanstackStart),
+        tanstackStart({
+          ...pluginOptions.tanstackStart,
+          // Needed when Vite runs in middlewareMode inside our Elysia dev server:
+          // otherwise TanStack skips installing its SSR request middleware.
+          vite: { ...pluginOptions.tanstackStart?.vite, installDevServerMiddleware: true },
+        }),
         viteReact(pluginOptions.react),
       ],
       resolve: {

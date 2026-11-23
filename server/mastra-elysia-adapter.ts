@@ -148,6 +148,15 @@ export class MastraElysiaServer extends MastraServer<Elysia, ElysiaContext, Elys
     // Request logging can be added via Elysia hooks if `server.apiReqLogs` is enabled.
   }
 
+  async registerCustomApiRoutes(): Promise<void> {
+    // Opt-in routes (e.g. KNOWLEDGE_ROUTES) are schema routes and must be
+    // registered explicitly; the base init() only mounts the built-in routes.
+    const remaining = await this.registerSchemaApiRoutes()
+    for (const route of remaining) {
+      await this.registerRoute(this.app, { responseType: 'json', ...route } as unknown as ServerRoute, { prefix: '' })
+    }
+  }
+
   async getParams(_route: ServerRoute, request: ElysiaContext): Promise<ParsedRequestParams> {
     const url = new URL(request.request.url)
     const { paramNames } = normalizeRouteParams(_route.path)
