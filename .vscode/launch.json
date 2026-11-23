@@ -8,7 +8,7 @@
       "name": "TanStack Start: debug full stack",
       "type": "node-terminal",
       "request": "launch",
-      "command": "pnpm dev",
+      "command": "bun run dev",
       "cwd": "${workspaceFolder}"
     }
   ]

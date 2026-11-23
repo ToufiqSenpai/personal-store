@@ -19,7 +19,7 @@ After you click the `Deploy` button above, you'll want to have standalone copy o
 1. First [clone the repo](#clone) if you have not done so already
 2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `DATABASE_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
+3. `bun install && bun run dev` to install dependencies and start the dev server
 4. open `http://localhost:3000` to open the app in your browser
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
@@ -35,7 +35,19 @@ To do so, follow these steps:
 
 ## Production
 
-To build and serve the template in production mode, run `pnpm build && pnpm start`.
+To build and serve the template in production mode, run `bun run build && bun run start`. Production uses Elysia on Bun ([server/index.ts](server/index.ts)) to serve `dist/client` and forward dynamic requests to the TanStack Start handler.
+
+### Mastra Studio
+
+Mastra is mounted on the same Elysia server at `/api/mastra` through a custom v2 adapter ([server/mastra-elysia-adapter.ts](server/mastra-elysia-adapter.ts)); the Mastra entry point is [src/mastra/index.ts](src/mastra/index.ts).
+
+1. Set `OPENAI_API_KEY` in `.env` (the example agent uses `openai/gpt-5.4-mini`).
+2. Start the app: `bun run start` (or `bun run dev` for Vite, which does **not** include Mastra).
+3. In another terminal, run `bun run studio` and open `http://localhost:4111`.
+
+The studio script points Studio at `localhost:3000` with API prefix `/api/mastra`. If you change the app port, pass matching `--server-port` / `--server-api-prefix` flags to `mastra studio`.
+
+Mastra currently uses in-memory storage (fine for local development). Configure a persistent adapter such as `@mastra/pg` before deploying.
 
 ## How it works
 
