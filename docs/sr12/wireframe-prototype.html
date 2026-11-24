@@ -1,0 +1,325 @@
+<!doctype html>
+<!--
+  THROWAWAY PROTOTYPE for issue #6. Not production code.
+  Question: what should the structure and visual hierarchy of /sr12 look like?
+  Plan: three structurally different wireframes, switchable via ?variant=A|B|C,
+  with a ?viewport=desktop|tablet|mobile control. Section order and heading
+  levels are LOCKED by issue #5 — variants differ only in hierarchy, relative
+  space and CTA placement.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SR12 /sr12 — wireframe prototype (throwaway)</title>
+<style>
+  :root{
+    --paper:#f7f7f5; --ink:#1f2328; --muted:#6b7280; --wire:#9ca3af;
+    --line:#d1d5db; --accent:#891B02; --wa:#25D366; --wa-ink:#063d1c;
+    --note:#2f5cff; --gap:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font:14px/1.45 system-ui,-apple-system,sans-serif;color:var(--ink);background:#eceeea;padding-bottom:104px}
+  .masthead{max-width:1240px;margin:0 auto;padding:22px 20px 6px}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.12em;color:#fff;background:var(--accent);padding:4px 8px;border-radius:3px}
+  .masthead h1{font:700 22px/1.2 Georgia,serif;margin:10px 0 6px}
+  .masthead p{margin:0;color:#374151;max-width:900px;font-size:13px}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:11px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .swatch{width:12px;height:12px;border:1px solid var(--wire);background:#e9eaec;display:inline-block}
+  .swatch.cta{background:var(--wa);border-color:var(--wa);border-radius:3px}
+  .swatch.note{background:#f0f3ff;border-left:3px solid var(--note)}
+  .stage{display:flex;justify-content:center;padding:14px 20px 20px}
+  .frame{width:1120px;max-width:100%;background:var(--paper);border:1px solid #b8beb5;box-shadow:0 10px 34px #00000016;transition:width .18s ease}
+  .frame[data-viewport="tablet"]{width:768px}
+  .frame[data-viewport="mobile"]{width:390px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--line);background:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  section.wire{position:relative;border-bottom:1px dashed var(--wire);padding:14px 16px;overflow:hidden}
+  section.wire:last-child{border-bottom:0}
+  .meta{display:flex;gap:9px;align-items:center;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--note);margin-bottom:9px}
+  .meta .num{background:#2f5cff;color:#fff;border-radius:2px;padding:2px 5px;letter-spacing:0}
+  .meta .sz{margin-left:auto;color:var(--muted);letter-spacing:0}
+  h1,h2,h3{margin:0 0 8px}
+  h1{font:700 25px/1.18 Georgia,serif;color:var(--accent)}
+  h2{font:700 18px/1.25 Georgia,serif;color:var(--accent)}
+  h3{font:700 14px/1.3 system-ui,sans-serif;color:var(--ink)}
+  .box{border:1px dashed var(--wire);background:#e9eaec;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:10px;text-transform:uppercase;letter-spacing:.07em;text-align:center;padding:8px}
+  .box.img{background:repeating-linear-gradient(135deg,#e9eaec,#e9eaec 9px,#e2e4e7 9px,#e2e4e7 10px)}
+  .cta{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--wa);background:var(--wa);color:var(--wa-ink);font-weight:800;font-size:12px;padding:8px 12px;border-radius:999px;white-space:nowrap}
+  .cta.ghost{background:transparent;color:#116329}
+  .cta::before{content:"●";font-size:9px}
+  .badge{border:1px solid var(--line);background:#fff;padding:10px 8px;text-align:center;font-size:12px}
+  .small{font-size:11px;color:var(--muted)}
+  .step{border:1px solid var(--line);background:#fff;padding:10px;font-size:12px}
+  .step b{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;border-radius:999px;background:var(--accent);color:#fff;margin-right:6px}
+  .question{border:1px solid var(--line);background:#fff;padding:9px 10px;font-size:12px;display:flex;justify-content:space-between;gap:8px}
+  .question::after{content:"⌄";color:var(--muted)}
+  .note-strip{border-left:3px solid var(--note);background:#f0f3ff;padding:6px 10px;font-size:11px;color:#1e3a8a;margin-top:10px}
+  .row{display:flex;gap:var(--gap)}
+  .col{flex:1;min-width:0}
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
+  .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}
+  .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gap)}
+  .stack{display:grid;gap:8px;align-content:start}
+  .bulus-row{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:var(--gap);align-items:center;border-bottom:1px dotted var(--line);padding-bottom:10px}
+  .ticker{display:flex;gap:10px;flex-wrap:wrap;font-size:11px}
+  .ticker span{border:1px solid var(--line);background:#fff;padding:4px 9px;border-radius:999px}
+  .cta-band{border:1px dashed var(--wa);background:#eafaf0;padding:14px;display:flex;align-items:center;justify-content:center;gap:12px}
+  .mobile-bar{display:none;border-top:1px dashed var(--wa);background:#eafaf0;color:#116329;font-size:11px;text-align:center;padding:8px;margin-top:12px;letter-spacing:.06em}
+  .frame[data-viewport="mobile"] .mobile-bar{display:block}
+  .frame[data-viewport="mobile"] section.wire{min-height:auto!important}
+  .frame[data-viewport="mobile"] .grid2,
+  .frame[data-viewport="mobile"] .grid3,
+  .frame[data-viewport="mobile"] .grid4,
+  .frame[data-viewport="mobile"] .row{display:grid;grid-template-columns:1fr}
+  .frame[data-viewport="mobile"] .bulus-row{grid-template-columns:64px minmax(0,1fr) auto}
+  .frame[data-viewport="mobile"] h1{font-size:21px}
+  .frame[data-viewport="tablet"] .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .frame[data-viewport="tablet"] h1{font-size:23px}
+  .notes{max-width:1120px;margin:0 auto;padding:0 20px 20px;font-size:12px}
+  .notes[hidden]{display:none}
+  .notes-inner{border:1px solid var(--line);background:#fff;padding:14px 16px}
+  .notes h2{font:700 15px/1.2 Georgia,serif;color:var(--accent);margin:0 0 8px}
+  .notes dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+  .notes dt{font-weight:700;color:var(--muted)}
+  .notes dd{margin:0}
+  .notes .verdict{margin-top:10px;padding:8px 10px;background:#f0f3ff;border-left:3px solid var(--note);color:#1e3a8a}
+  .switcher{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:#111827;color:#fff;border-radius:999px;padding:7px 9px;box-shadow:0 8px 24px #0005;z-index:50;font-size:12px}
+  .switcher button{cursor:pointer;border:0;background:#374151;color:#fff;border-radius:999px;width:30px;height:30px;font-size:16px;line-height:1}
+  .switcher button:hover{background:#4b5563}
+  .switcher button.wide{width:auto;padding:0 12px;font-size:12px}
+  .switcher .label{min-width:210px;text-align:center;font-weight:700}
+  .switcher select{background:#374151;color:#fff;border:1px solid #4b5563;border-radius:999px;padding:6px 8px;font-size:12px}
+  .switcher .hint{opacity:.65;font-size:11px;padding-right:4px}
+</style>
+</head>
+<body>
+  <header class="masthead">
+    <span class="tag">THROWAWAY PROTOTYPE · #6</span>
+    <h1>SR12 landing page — structure &amp; visual hierarchy</h1>
+    <p>Three rough wireframes of the six agreed sections. <strong>Section order and H1–H2 levels are fixed by #5</strong>, so the variants disagree about layout, relative space and CTA placement only. Flip with ← / → or the bar at the bottom; change viewport in the bar. Open this file directly in a browser — no server needed.</p>
+    <div class="legend">
+      <span><i class="swatch"></i>placeholder / image</span>
+      <span><i class="swatch cta"></i>WhatsApp CTA</span>
+      <span><i class="swatch note"></i>annotation</span>
+      <span>URL: <code>?variant=A&amp;viewport=desktop</code></span>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div class="frame" id="frame" data-variant="A" data-viewport="desktop"><div id="canvas"></div></div>
+  </div>
+
+  <aside class="notes" id="notes" hidden><div class="notes-inner" id="notes-inner"></div></aside>
+
+  <div class="switcher" role="group" aria-label="Prototype controls">
+    <button id="prev" aria-label="Previous variant">←</button>
+    <span class="label" id="label"></span>
+    <button id="next" aria-label="Next variant">→</button>
+    <select id="viewport" aria-label="Viewport">
+      <option value="desktop">Desktop 1120</option>
+      <option value="tablet">Tablet 768</option>
+      <option value="mobile">Mobile 390</option>
+    </select>
+    <button id="notesBtn" class="wide" aria-expanded="false">Notes</button>
+    <span class="hint">← → to flip</span>
+  </div>
+
+<script>
+(function () {
+  var H = function (n, t) { return '<h' + n + '>' + t + '</h' + n + '>'; };
+  var img = function (t) { return '<div class="box img">' + (t || 'image placeholder') + '</div>'; };
+  var wa = function (t, ghost) { return '<span class="cta' + (ghost ? ' ghost' : '') + '">' + (t || 'Chat WhatsApp') + '</span>'; };
+  var badge = function (t) { return '<div class="badge">' + t + '</div>'; };
+  var meta = function (n, name, h) {
+    return '<div class="meta"><span class="num">' + n + '</span><span>' + name + '</span><span class="sz">≈' + h + 'px</span></div>';
+  };
+  var sec = function (n, name, h, inner, cls) {
+    return '<section class="wire ' + (cls || '') + '" style="min-height:' + h + 'px">' + meta(n, name, h) + inner + '</section>';
+  };
+  var step = function (n, t) { return '<div class="step"><b>' + n + '</b>' + t + '</div>'; };
+  var q = function (t) { return '<div class="question">' + t + '</div>'; };
+  var card = function (name, permit) {
+    return '<div class="stack">' + img('product photo') + H(3, name) +
+      '<div class="small">No. izin edar: ' + permit + '</div>' + wa('Tanya via WA', true) + '</div>';
+  };
+  var bulus = function (name, permit, note) {
+    return '<div class="bulus-row">' + img('thumb') + '<div>' + H(3, name) +
+      '<div class="small">' + permit + ' · ' + note + '</div></div>' + wa('WA', true) + '</div>';
+  };
+
+  // A — conversion-first funnel: big hero CTA, card grid, repeated CTAs.
+  function variantA() {
+    return '<div class="topbar"><span>SR12</span>' + wa('Chat WA', true) + '</div>' +
+      sec('01', 'Hero', 300,
+        '<div class="row" style="min-height:228px">' +
+          '<div class="col">' + H(1, 'SR12 — Skincare Herbal dari Pesisir Selatan') +
+            '<div class="box" style="height:32px;justify-content:flex-start;padding:0 10px">subhead · 1–2 lines · “SR12 itu apa”</div>' +
+            '<div class="row" style="margin-top:14px;align-items:center">' + wa('Chat WhatsApp') + wa('Lihat produk ↓', true) + '</div>' +
+            '<div class="note-strip">Primary WA CTA above the fold; secondary anchor jumps to #produk.</div>' +
+          '</div><div class="col">' + img('hero image · logo / product') + '</div></div>') +
+      sec('02', 'Trust strip', 88,
+        '<div class="grid4">' + badge('BPOM per produk') + badge('Sertifikat halal') + badge('Jumlah mitra SR12') + badge('Sejarah SR12') + '</div>') +
+      sec('03', 'Product highlights', 260, H(2, 'Pilihan produk SR12') +
+        '<div class="grid3">' +
+          card('SR12 Massage Oil Bulus', 'NA18200103982') +
+          card('SR12 Gomilku', 'MD 800911109616') +
+          card('SR12 Skincare Acne Cream', 'NA18220112083') +
+        '</div>') +
+      sec('04', 'How to order', 150, H(2, 'Cara order SR12') +
+        '<div class="grid3">' + step(1, 'Pilih produk') + step(2, 'Chat WhatsApp') + step(3, 'Konfirmasi &amp; kirim') + '</div>' +
+        '<div class="row" style="margin-top:10px;justify-content:flex-end">' + wa('Tanya cara order', true) + '</div>') +
+      sec('05', 'FAQ', 200, H(2, 'Pertanyaan yang sering ditanyakan') +
+        '<div class="grid2">' + q('SR12 BPOM?') + q('SR12 halal?') + q('Cara order SR12?') + q('Harga SR12?') + '</div>') +
+      sec('06', 'Contact / WhatsApp CTA', 150, H(2, 'Chat kami via WhatsApp') +
+        '<div class="cta-band">' + wa('Chat WhatsApp · +6285111047670') + '</div>' +
+        '<div class="mobile-bar">sticky WA bar · mobile only</div>');
+  }
+
+  // B — trust-led editorial: heavier trust panel, stacked alternating products, one persistent CTA.
+  function variantB() {
+    return '<div class="topbar"><span>SR12 · skincare herbal</span>' + wa('Chat WA', true) + '</div>' +
+      sec('01', 'Hero', 220,
+        '<div class="row" style="min-height:160px">' +
+          '<div class="col">' + H(1, 'SR12 — Skincare Herbal dari Pesisir Selatan') +
+            '<div class="small">Brand statement · 2–3 lines · Pesisir Selatan, Sumatra Barat</div>' +
+            '<div style="margin-top:14px">' + wa('Chat WhatsApp', true) + '</div>' +
+          '</div><div class="col">' + img('wordmark / brand block') + '</div></div>' +
+        '<div class="note-strip">WA CTA sits lower in the hero; persistent pill in the top bar carries conversion while scrolling.</div>') +
+      sec('02', 'Trust strip', 180, H(2, 'Legalitas dan kepercayaan SR12') +
+        '<div class="stack">' +
+          '<div class="bulus-row">' + badge('BPOM / izin edar per produk') + '<span class="small">sourced per product · linked to fact sheet</span></div>' +
+          '<div class="bulus-row">' + badge('Sertifikat halal') + '<span class="small">only products with a BPJPH ID claim halal</span></div>' +
+          '<div class="bulus-row">' + badge('Jumlah mitra SR12') + '<span class="small">figure only if verifiable</span></div>' +
+          '<div class="bulus-row">' + badge('Sejarah SR12') + '<span class="small">neutral, dated copy</span></div>' +
+        '</div>') +
+      sec('03', 'Product highlights', 450, H(2, 'Pilihan produk SR12') +
+        '<div class="stack">' +
+          bulus('SR12 Massage Oil Bulus', 'NA18200103982', 'BPOM') +
+          bulus('SR12 Gomilku', 'MD 800911109616', 'izin edar') +
+          bulus('SR12 Skincare Acne Cream', 'NA18220112083', 'BPOM') +
+        '</div>' +
+        '<div class="note-strip">Alternating image/text rows — deliberately no card grid.</div>') +
+      sec('04', 'How to order', 190, H(2, 'Cara order SR12') +
+        '<div class="stack">' + step(1, 'Pilih produk dari pilihan di atas') + step(2, 'Chat kami via WhatsApp') + step(3, 'Info harga &amp; pengiriman, lalu konfirmasi') + '</div>') +
+      sec('05', 'FAQ', 220, H(2, 'Pertanyaan yang sering ditanyakan') +
+        '<div class="row"><div class="col stack">' + q('SR12 BPOM?') + q('SR12 halal?') + q('Cara order SR12?') +
+        '</div><div class="col box" style="flex:0 0 170px">butuh bantuan?<br>' + wa('Chat WA', true) + '</div></div>') +
+      sec('06', 'Contact / WhatsApp CTA', 140, H(2, 'Chat kami via WhatsApp') +
+        '<div class="box" style="height:56px">' + wa('Chat WhatsApp · +6285111047670') + '</div>' +
+        '<div class="note-strip">Quiet final CTA — no repeated WA buttons in the product rows.</div>');
+  }
+
+  // C — catalogue scanner: compact header, dominant product list, persistent mobile bar.
+  function variantC() {
+    return sec('01', 'Hero', 140,
+        '<div class="row" style="align-items:center">' +
+          '<div class="col">' + H(1, 'SR12 — Skincare Herbal dari Pesisir Selatan') +
+            '<div class="small">Ringkas: satu baris deskripsi + link Trust strip</div></div>' +
+          '<div class="col" style="flex:0 0 auto">' + wa('Chat WhatsApp') + '</div></div>') +
+      sec('02', 'Trust strip', 56,
+        '<div class="ticker"><span>BPOM / izin edar</span><span>Halal (per produk)</span><span>Mitra SR12</span><span>Pesisir Selatan</span></div>') +
+      sec('03', 'Product highlights', 320,
+        '<div class="ticker" style="margin-bottom:10px"><span>acne series</span><span>body care</span><span>herbal</span><span>face care</span></div>' +
+        H(2, 'Pilihan produk SR12') +
+        '<div class="stack">' +
+          bulus('SR12 Massage Oil Bulus', 'NA18200103982', 'Rp —') +
+          bulus('SR12 Gomilku', 'MD 800911109616', 'Rp —') +
+          bulus('SR12 Skincare Acne Cream', 'NA18220112083', 'Rp —') +
+        '</div>' +
+        '<div class="note-strip">Category chips are static labels, not filters — no dynamic content in scope.</div>') +
+      sec('04', 'How to order', 120, H(2, 'Cara order SR12') +
+        '<div class="row" style="align-items:center">' +
+          step(1, 'Pilih') + step(2, 'Chat WA') + step(3, 'Harga &amp; kirim') + step(4, 'Konfirmasi') +
+          '<div style="flex:0 0 auto">' + wa('Chat WA') + '</div></div>') +
+      sec('05', 'FAQ', 170, H(2, 'Pertanyaan yang sering ditanyakan') +
+        '<div class="grid2">' + q('SR12 BPOM?') + q('SR12 halal?') + q('Cara order SR12?') + q('Harga SR12?') + '</div>') +
+      sec('06', 'Contact / WhatsApp CTA', 100, H(2, 'Chat kami via WhatsApp') +
+        '<div class="row" style="align-items:center;justify-content:space-between">' +
+          '<span class="small">+6285111047670 · only conversion path (no marketplace)</span>' + wa('Chat WhatsApp') + '</div>' +
+        '<div class="mobile-bar">sticky WA bar · mobile only</div>');
+  }
+
+  var variants = {
+    A: { name: 'Conversion-first funnel', render: variantA,
+      space: '300 / 88 / 260 / 150 / 200 / 150 px (hero → contact)',
+      cta: 'Primary WA in hero above the fold; ghost WA on each product card; full-width WA band at the end. Mobile adds a sticky WA bar.',
+      read: 'Clearest path to a lead. Trust strip is thin relative to its SEO weight.' },
+    B: { name: 'Trust-led editorial', render: variantB,
+      space: '220 / 180 / 450 / 190 / 220 / 140 px',
+      cta: 'One persistent WA pill in the top bar plus a quiet final CTA. No per-product buttons. Mobile keeps the top pill.',
+      read: 'Strongest brand/legalitas story; conversion asks are fewer and lower.' },
+    C: { name: 'Catalogue scanner', render: variantC,
+      space: '140 / 56 / 320 / 120 / 170 / 100 px',
+      cta: 'Compact hero button, button at the end of “Cara order”, and a sticky mobile WA footer.',
+      read: 'Fastest product/price scanning; trust is reduced to a ticker.' }
+  };
+  var keys = ['A', 'B', 'C'];
+  var frame = document.getElementById('frame');
+  var canvas = document.getElementById('canvas');
+  var label = document.getElementById('label');
+  var vpSelect = document.getElementById('viewport');
+  var notes = document.getElementById('notes');
+  var notesInner = document.getElementById('notes-inner');
+  var notesBtn = document.getElementById('notesBtn');
+  var current = 'A';
+
+  function params() { return new URLSearchParams(location.search); }
+  function writeUrl() {
+    var p = params();
+    p.set('variant', current);
+    p.set('viewport', frame.getAttribute('data-viewport'));
+    history.replaceState(null, '', location.pathname + '?' + p.toString());
+  }
+  function renderNotes() {
+    var v = variants[current];
+    notesInner.innerHTML = '<h2>' + current + ' · ' + v.name + ' — decision notes</h2>' +
+      '<dl><dt>Locked by #5</dt><dd>Section order: hero → trust → highlights → how to order → FAQ → contact. H1 in hero; H2 in the other five; H3 per product and per FAQ question.</dd>' +
+      '<dt>Relative space</dt><dd>' + v.space + '</dd>' +
+      '<dt>CTA placement</dt><dd>' + v.cta + '</dd>' +
+      '<dt>Responsiveness</dt><dd>Every grid collapses to one column at 390px; FAQ accordions stack; how-to-order steps stack; 768px keeps the hero split but wraps trust badges to 2×2.</dd>' +
+      '<dt>Trade-off</dt><dd>' + v.read + '</dd></dl>' +
+      '<div class="verdict"><strong>Working recommendation:</strong> build on A’s skeleton, borrow B’s heavier trust strip (~140–180px) and C’s sticky mobile WA bar. Keeps the #5 heading order intact and balances SEO trust signals with the WhatsApp conversion goal.</div>';
+  }
+  function render() {
+    canvas.innerHTML = variants[current].render();
+    frame.setAttribute('data-variant', current);
+    label.textContent = current + ' (' + variants[current].name + ')';
+    renderNotes();
+    writeUrl();
+  }
+  function cycle(delta) {
+    var i = keys.indexOf(current);
+    current = keys[(i + delta + keys.length) % keys.length];
+    render();
+  }
+  function setViewport(v) {
+    frame.setAttribute('data-viewport', v);
+    vpSelect.value = v;
+    writeUrl();
+  }
+
+  document.getElementById('prev').addEventListener('click', function () { cycle(-1); });
+  document.getElementById('next').addEventListener('click', function () { cycle(1); });
+  vpSelect.addEventListener('change', function () { setViewport(vpSelect.value); });
+  notesBtn.addEventListener('click', function () {
+    notes.hidden = !notes.hidden;
+    notesBtn.setAttribute('aria-expanded', String(!notes.hidden));
+  });
+  document.addEventListener('keydown', function (e) {
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+    if (e.key === 'ArrowLeft') { cycle(-1); }
+    if (e.key === 'ArrowRight') { cycle(1); }
+  });
+
+  var p = params();
+  if (keys.indexOf(p.get('variant')) !== -1) current = p.get('variant');
+  var vp = p.get('viewport');
+  if (['desktop', 'tablet', 'mobile'].indexOf(vp) !== -1) setViewport(vp);
+  render();
+})();
+</script>
+</body>
+</html>
